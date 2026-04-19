@@ -1,6 +1,7 @@
-import { motion } from 'motion/react';
-import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
+import React, { useState, useEffect, useRef, useMemo, memo } from 'react';
 import { useLocation } from 'react-router-dom';
+import { Fish, Martini, Coffee, ChevronRight } from 'lucide-react';
 import { Navbar, Footer } from './LandingPage';
 
 interface MenuItem {
@@ -11,7 +12,7 @@ interface MenuItem {
   video?: string;
 }
 
-const MenuCard: React.FC<{ item: MenuItem }> = ({ item }) => {
+const MenuCard = memo(({ item }: { item: MenuItem }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isHovered, setIsHovered] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -44,7 +45,7 @@ const MenuCard: React.FC<{ item: MenuItem }> = ({ item }) => {
 
   return (
     <motion.div 
-      className="group bg-punta-sand rounded-xl overflow-hidden border border-atlantic-blue/5 hover:border-golden-sunset/30 transition-all duration-300 shadow-sm hover:shadow-xl cursor-pointer h-full flex flex-col"
+      className="group bg-punta-sand rounded-xl overflow-hidden border border-atlantic-blue/5 hover:border-golden-sunset/30 transition-all duration-300 shadow-sm hover:shadow-xl cursor-pointer h-full flex flex-col will-change-transform"
       whileHover={{ y: -8 }}
       onMouseEnter={handleInteractionStart}
       onMouseLeave={handleInteractionEnd}
@@ -58,7 +59,9 @@ const MenuCard: React.FC<{ item: MenuItem }> = ({ item }) => {
         <img 
           src={item.image} 
           alt={item.name} 
-          className={`w-full h-full object-cover transition-all duration-700 ${isPlaying ? 'opacity-0 scale-110' : 'opacity-100 scale-100'}`}
+          decoding="async"
+          className={`w-full h-full object-cover transition-all duration-700 ${isPlaying ? 'opacity-0 scale-105' : 'opacity-100 scale-100'}`}
+          referrerPolicy="no-referrer"
         />
         
         {/* Video Layer */}
@@ -69,7 +72,7 @@ const MenuCard: React.FC<{ item: MenuItem }> = ({ item }) => {
             muted
             loop
             playsInline
-            preload="auto"
+            preload="metadata"
             onPlaying={() => setIsPlaying(true)}
             onPause={() => setIsPlaying(false)}
             onWaiting={() => setIsPlaying(false)}
@@ -78,7 +81,7 @@ const MenuCard: React.FC<{ item: MenuItem }> = ({ item }) => {
                 videoRef.current.play().catch(() => {});
               }
             }}
-            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${isPlaying ? 'opacity-100' : 'opacity-0'}`}
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 pointer-events-none ${isPlaying ? 'opacity-100' : 'opacity-0'}`}
           />
         )}
 
@@ -115,31 +118,21 @@ const MenuCard: React.FC<{ item: MenuItem }> = ({ item }) => {
       </div>
     </motion.div>
   );
-};
+});
 
 export const MenuPage = () => {
   const location = useLocation();
-  const [activeTab, setActiveTab] = useState<'sushi' | 'drinks'>('sushi');
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const tab = params.get('tab');
-    if (tab === 'drinks') {
-      setActiveTab('drinks');
-    } else if (tab === 'sushi') {
-      setActiveTab('sushi');
-    }
-  }, [location.search]);
+  const [activeTab, setActiveTab] = useState<'sushi' | 'drinks' | 'brunch'>('sushi');
 
   const sushiMenu: { category: string; items: MenuItem[] }[] = [
     {
       category: "Entradas",
       items: [
-        { name: "Arrolladitos Primavera", desc: "6 unidades", price: "$450", image: "https://img.freepik.com/free-photo/close-up-delicious-asian-food_23-2150535885.jpg" ,video:"https://www.pexels.com/download/video/10823655/"},
-        { name: "Ebi Furai", desc: "Langostinos fritos 6 unidades", price: "$790", image: "https://images.unsplash.com/photo-1611143669185-af224c5e3252?q=80&w=800&auto=format&fit=crop" ,video:"https://videos.pexels.com/video-files/8964691/8964691-hd_1920_1080_25fps.mp4"},
-        { name: "Tiradito de Salmón", desc: "Finos cortes de salmón con sal marina, jugo de lima, salsa de maracuyá, crocante de jengibre y aceite de oliva", price: "$690", image: "https://img.freepik.com/free-photo/carpaccio-salmon-white-plate_74190-682.jpg" },
-        { name: "Sashimi", desc: "Cuatro cortes de salmón fresco", price: "$490", image: "https://images.unsplash.com/photo-1534482421-64566f976cfa?q=80&w=800&auto=format&fit=crop" },
-        { name: "Nigiris Nikkei", desc: "Cuatro nigiri de salmón flameado con parmesano, salsa de ceviche y chips de papa", price: "$590", image: "https://img.freepik.com/free-photo/sushi-roll_1203-3648.jpg" },
+        { name: "Arrolladitos Primavera", desc: "6 unidades", price: "$450", image: "https://storage.googleapis.com/www.tanganika.uy/public/food/arrolladitos-primavera/arrolladitos-primavera.jpeg" ,video:"https://www.pexels.com/download/video/10823655/"},
+        { name: "Ebi Furai", desc: "Langostinos fritos 6 unidades", price: "$790", image: "https://storage.googleapis.com/www.tanganika.uy/public/food/ebi-furai/ebi-furai.jpeg" ,video:"https://storage.googleapis.com/www.tanganika.uy/public/food/ebi-furai/ebi-furai.mp4"},
+        { name: "Tiradito de Salmón", desc: "Finos cortes de salmón con sal marina, jugo de lima, salsa de maracuyá, crocante de jengibre y aceite de oliva", price: "$690", image: "https://storage.googleapis.com/www.tanganika.uy/public/food/tiraditos-salmon/tiraditos-salmon.jpeg" , video:"https://storage.googleapis.com/www.tanganika.uy/public/food/tiraditos-salmon/tiraditos-salmon.mp4" },
+        { name: "Sashimi", desc: "Cuatro cortes de salmón fresco", price: "$490", image: "https://storage.googleapis.com/www.tanganika.uy/public/food/sashimi/sashimi.jpeg" ,video: "https://storage.googleapis.com/www.tanganika.uy/public/food/sashimi/sashimi.mp4" },
+        { name: "Nigiris Nikkei", desc: "Cuatro nigiri de salmón flameado con parmesano, salsa de ceviche y chips de papa", price: "$590", image: "https://storage.googleapis.com/www.tanganika.uy/public/food/niguiris-nikkei/niguiris-nikkei.jpeg" ,video:"https://storage.googleapis.com/www.tanganika.uy/public/food/niguiris-nikkei/niguiris-nikkei.mp4" },
       ]
     },
     {
@@ -257,34 +250,102 @@ export const MenuPage = () => {
     }
   ];
 
+  const brunchMenu: { category: string; items: MenuItem[] }[] = [
+    {
+      category: "Croissants Gourmet",
+      items: [
+        { name: "Croissant Kraken", desc: "Croissant con salmón, base cremosa, rúcula y hierbas frescas.", price: "$650", image: "https://images.unsplash.com/photo-1555507036-ab1f4038808a?q=80&w=800&auto=format&fit=crop" },
+        { name: "Croissant Atlántico", desc: "Croissant con palta, huevos, tomates cherry y mix de semillas.", price: "$550", image: "https://images.unsplash.com/photo-1530610476181-d83430b64dcd?q=80&w=800&auto=format&fit=crop" },
+        { name: "Croissant Mediterráneo", desc: "Croissant con tomates asados, rúcula, jamón crudo y salsa alioli.", price: "$600", image: "https://images.unsplash.com/photo-1549931319-a545dcf3bc73?q=80&w=800&auto=format&fit=crop" },
+        { name: "Croissant de Salmón", desc: "Croissant con queso crema, rúcula, cilantro y salmón fresco.", price: "$650", image: "https://images.unsplash.com/photo-1555507036-ab1f4038808a?q=80&w=800&auto=format&fit=crop" },
+        { name: "Croissant Relleno", desc: "Croissant relleno (varía según el día, ingredientes frescos).", price: "$500", image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=800&auto=format&fit=crop" },
+      ]
+    },
+    {
+      category: "Postres",
+      items: [
+        { name: "Ricardito con Frutos Rojos", desc: "Postre dulce con cobertura de chocolate y frutos rojos.", price: "$420", image: "https://images.unsplash.com/photo-1551024506-0bccd828d307?q=80&w=800&auto=format&fit=crop" },
+        { name: "Volcán con Helado", desc: "Bizcocho caliente con centro cremoso acompañado de helado.", price: "$420", image: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?q=80&w=800&auto=format&fit=crop" },
+        { name: "Carrot Cake", desc: "Torta de zanahoria húmeda con cobertura cremosa.", price: "$420", image: "https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?q=80&w=800&auto=format&fit=crop" },
+        { name: "Alfajores", desc: "Alfajores clásicos rellenos con dulce de leche.", price: "$240", image: "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=800&auto=format&fit=crop" },
+        { name: "Postre del Día", desc: "Postre especial del día (consultar disponibilidad).", price: "$420", image: "https://images.unsplash.com/photo-1488477181946-6428a0291777?q=80&w=800&auto=format&fit=crop" },
+      ]
+    },
+    {
+      category: "Cafetería",
+      items: [
+        { name: "Expreso", desc: "", price: "$190", image: "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?q=80&w=800&auto=format&fit=crop" },
+        { name: "Americano", desc: "", price: "$230", image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=800&auto=format&fit=crop" },
+        { name: "Capuccino", desc: "", price: "$260", image: "https://images.unsplash.com/photo-1534778101976-62847782c213?q=80&w=800&auto=format&fit=crop" },
+        { name: "Doble", desc: "Expreso Doble", price: "$230", image: "https://images.unsplash.com/photo-1541167760496-162955ed8a9f?q=80&w=800&auto=format&fit=crop" },
+        { name: "Cortado", desc: "", price: "$230", image: "https://images.unsplash.com/photo-1534778101976-62847782c213?q=80&w=800&auto=format&fit=crop" },
+        { name: "Té", desc: "Variedad de Tés", price: "$200", image: "https://images.unsplash.com/photo-1582733360431-778508ae9f94?q=80&w=800&auto=format&fit=crop" },
+      ]
+    },
+    {
+      category: "Sin Alcohol",
+      items: [
+        { name: "Agua con o sin gas", desc: "", price: "$190", image: "https://images.unsplash.com/photo-1548839140-29a749e1cf4d?q=80&w=800&auto=format&fit=crop" },
+        { name: "Refrescos línea Coca Cola", desc: "", price: "$230", image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?q=80&w=800&auto=format&fit=crop" },
+        { name: "Maracuyada / Pomelada / Limonada", desc: "", price: "$290", image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?q=80&w=800&auto=format&fit=crop" },
+        { name: "Jugo de Naranja", desc: "", price: "$260", image: "https://images.unsplash.com/photo-1613478223719-2ab802602423?q=80&w=800&auto=format&fit=crop" },
+      ]
+    },
+    {
+      category: "Vinos",
+      items: [
+        { name: "Viña Edén Chardonnay Kosher 2023", desc: "", price: "$2.400", image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=800&auto=format&fit=crop" },
+        { name: "Rosé Blend 2024", desc: "", price: "$2.400", image: "https://images.unsplash.com/photo-1585553616435-2dc0a54e271d?q=80&w=800&auto=format&fit=crop" },
+        { name: "Méthode Champenoise Brut Nature", desc: "", price: "$4.000", image: "https://images.unsplash.com/photo-1594411135763-744cd0a8310c?q=80&w=800&auto=format&fit=crop" },
+        { name: "Pueblo Edén Tannat Kosher 2021", desc: "", price: "$1.600", image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=800&auto=format&fit=crop" },
+        { name: "Pueblo Edén Chardonnay Kosher 2023", desc: "", price: "$1.300", image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=800&auto=format&fit=crop" },
+        { name: "Pueblo Edén Verano", desc: "", price: "$1.100", image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=800&auto=format&fit=crop" },
+        { name: "Pueblo Edén Méthode Champenoise Brut", desc: "", price: "$2.100", image: "https://images.unsplash.com/photo-1594411135763-744cd0a8310c?q=80&w=800&auto=format&fit=crop" },
+        { name: "Pueblo Edén Méthode Champenoise Rosé", desc: "", price: "$2.100", image: "https://images.unsplash.com/photo-1594411135763-744cd0a8310c?q=80&w=800&auto=format&fit=crop" },
+      ]
+    },
+    {
+      category: "Otros",
+      items: [
+        { name: "Albariño de Garzón", desc: "", price: "$2900", image: "https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?q=80&w=800&auto=format&fit=crop" },
+        { name: "Clicquot Brut", desc: "", price: "$12.000", image: "https://images.unsplash.com/photo-1594411135763-744cd0a8310c?q=80&w=800&auto=format&fit=crop" },
+        { name: "GARZÓN Sauvignon Blanc", desc: "", price: "$1400", image: "https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?q=80&w=800&auto=format&fit=crop" },
+      ]
+    }
+  ];
+
+  const currentMenu = useMemo(() => {
+    if (activeTab === 'sushi') return sushiMenu;
+    if (activeTab === 'drinks') return drinksMenu;
+    return brunchMenu;
+  }, [activeTab]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const tab = params.get('tab');
+    if (tab === 'drinks') {
+      setActiveTab('drinks');
+    } else if (tab === 'brunch') {
+      setActiveTab('brunch');
+    } else if (tab === 'sushi') {
+      setActiveTab('sushi');
+    }
+  }, [location.search]);
+
   return (
     <div className="bg-white-pueblo min-h-screen text-atlantic-blue selection:bg-golden-sunset selection:text-white-pueblo relative overflow-hidden">
       {/* Sea-themed background elements - Optimized for performance */}
-      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        {/* Base Sea Texture - Static for performance */}
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1505118380757-91f5f5632de0?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center opacity-[0.12] mix-blend-multiply" />
-        
-        {/* Soft Blue Gradient Overlay - Static */}
-        <div className="absolute inset-0 bg-gradient-to-b from-uruguayan-sky/15 via-white-pueblo/95 to-white-pueblo" />
-        
-        {/* Animated Light Shimmer - Simplified and GPU accelerated */}
-        <motion.div 
-          animate={{ 
-            opacity: [0.04, 0.08, 0.04],
-          }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(255,255,255,0.2)_0%,transparent_70%)] mix-blend-overlay will-change-[opacity]"
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-white-pueblo">
+        {/* Base Sea Texture */}
+        <div 
+          className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1505118380757-91f5f5632de0?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center opacity-[0.08] mix-blend-multiply" 
         />
-
-        {/* Subtle Wave Effect - Single layer, slow, GPU accelerated */}
-        <motion.div 
-          animate={{ 
-            x: [-10, 10, -10],
-            y: [-5, 5, -5],
-          }}
-          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-          className="absolute inset-0 opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay will-change-transform"
-        />
+        
+        {/* Soft Blue Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-uruguayan-sky/10 via-white-pueblo/90 to-white-pueblo" />
+        
+        {/* Shimmer Effect */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(255,255,255,0.15)_0%,transparent_70%)] opacity-30 animate-pulse transition-opacity duration-[10000ms]" />
       </div>
 
       <div className="relative z-10">
@@ -299,52 +360,78 @@ export const MenuPage = () => {
             <span className="text-golden-sunset text-xs tracking-[0.3em] uppercase font-bold block mb-4">Nuestra Carta</span>
             <h1 className="text-4xl md:text-7xl font-serif mb-8">Menú Visual</h1>
             
-            <div className="flex justify-center gap-4 md:gap-8 border-b border-atlantic-blue/10 pb-4 overflow-x-auto no-scrollbar">
-              <button 
-                onClick={() => setActiveTab('sushi')}
-                className={`text-base md:text-lg font-serif tracking-widest uppercase transition-colors pb-4 border-b-2 whitespace-nowrap ${
-                  activeTab === 'sushi' ? 'text-golden-sunset border-golden-sunset' : 'text-atlantic-blue/40 border-transparent hover:text-uruguayan-sky'
-                }`}
-              >
-                Sushi Bar
-              </button>
-              <button 
-                onClick={() => setActiveTab('drinks')}
-                className={`text-base md:text-lg font-serif tracking-widest uppercase transition-colors pb-4 border-b-2 whitespace-nowrap ${
-                  activeTab === 'drinks' ? 'text-golden-sunset border-golden-sunset' : 'text-atlantic-blue/40 border-transparent hover:text-uruguayan-sky'
-                }`}
-              >
-                Drinks
-              </button>
+            <div className="flex justify-center mb-8">
+              <div className="inline-flex bg-atlantic-blue/5 p-1.5 rounded-2xl border border-atlantic-blue/10 backdrop-blur-sm relative max-w-full overflow-x-auto no-scrollbar">
+                {[
+                  { id: 'sushi', label: 'Sushi Bar', icon: Fish },
+                  { id: 'drinks', label: 'Drinks', icon: Martini },
+                  { id: 'brunch', label: 'Brunch & Postres', icon: Coffee },
+                ].map((tab) => (
+                  <button 
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id as any)}
+                    className={`relative flex items-center gap-2 px-4 md:px-6 py-3 rounded-xl text-[10px] md:text-sm font-bold uppercase tracking-widest transition-all duration-300 z-10 whitespace-nowrap ${
+                      activeTab === tab.id ? 'text-white-pueblo' : 'text-atlantic-blue/50 hover:text-atlantic-blue'
+                    }`}
+                  >
+                    {activeTab === tab.id && (
+                      <motion.div 
+                        layoutId="activeTab"
+                        className="absolute inset-0 bg-atlantic-blue rounded-xl shadow-lg z-[-1]"
+                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                      />
+                    )}
+                    <tab.icon size={14} className={`md:w-4 md:h-4 ${activeTab === tab.id ? 'text-golden-sunset' : ''}`} />
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
             </div>
-            <motion.p 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-              className="text-[10px] uppercase tracking-[0.2em] text-atlantic-blue/40 mt-4 font-bold"
-            >
-              Toca en los ítems para ver el video
-            </motion.p>
+            <div className="mt-4 flex flex-col items-center gap-2">
+              <motion.p 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+                className="text-[10px] uppercase tracking-[0.2em] text-atlantic-blue/40 font-bold"
+              >
+                Toca en los ítems para ver el video
+              </motion.p>
+              <motion.p 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.7 }}
+                className="text-[9px] uppercase tracking-[0.15em] text-atlantic-blue/30 max-w-xl italic leading-relaxed px-4"
+              >
+                * La presentación de los platos y bebidas puede variar. Las imágenes y vídeos son de carácter ilustrativo; ante cualquier duda, por favor consulte con nuestro equipo de salón.
+              </motion.p>
+            </div>
           </motion.div>
 
-          <div className="space-y-20">
-            {(activeTab === 'sushi' ? sushiMenu : drinksMenu).map((section, idx) => (
+          <div className="relative overflow-hidden min-h-[400px]">
+            <AnimatePresence mode="wait" initial={false}>
               <motion.div 
-                key={section.category}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.1 }}
-                className="space-y-8"
+                key={activeTab}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2, ease: "linear" }}
+                className="space-y-20 will-change-opacity"
               >
-                <h3 className="text-3xl font-serif text-golden-sunset border-l-2 border-golden-sunset pl-4">{section.category}</h3>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {section.items.map((item, i) => (
-                    <MenuCard key={i} item={item} />
-                  ))}
-                </div>
+                {currentMenu.map((section) => (
+                  <div key={section.category} className="space-y-8">
+                    <h3 className="text-3xl font-serif text-golden-sunset border-l-2 border-golden-sunset pl-4">
+                      {section.category}
+                    </h3>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                      {section.items.map((item, i) => (
+                        <MenuCard key={`${section.category}-${item.name}-${i}`} item={item} />
+                      ))}
+                    </div>
+                  </div>
+                ))}
               </motion.div>
-            ))}
+            </AnimatePresence>
           </div>
         </div>
 
