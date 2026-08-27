@@ -223,16 +223,17 @@ export const Hero = () => {
       </div>
 
       {/* Content */}
-      <motion.div 
+      <motion.div
         style={{ y, opacity }}
         className="relative z-10 flex flex-col items-center text-center px-4 w-full max-w-5xl mx-auto pb-16 md:pb-0"
       >
-        <motion.img 
+        <h1 className="sr-only">Tanganika Sushi Bar — Restaurante frente al mar en Punta Ballena, Punta del Este</h1>
+        <motion.img
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.8, ease: "easeOut" }}
-          src="https://storage.googleapis.com/www.tanganika.uy/public/tanganika_white.png" 
-          alt="Tanganika" 
+          src="https://storage.googleapis.com/www.tanganika.uy/public/tanganika_white.png"
+          alt="Tanganika Sushi Bar"
           className="h-48 sm:h-64 md:h-80 lg:h-96 w-auto max-w-[90vw] object-contain mb-8 md:mb-12 relative z-30 drop-shadow-[0_4px_6px_rgba(0,0,0,0.5)]"
         />
         

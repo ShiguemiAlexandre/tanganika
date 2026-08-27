@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es" class="scroll-smooth">
+<html lang="es-UY" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -17,7 +17,10 @@
     <meta property="og:url" content="https://www.tanganika.uy/" />
     <meta property="og:title" content="Tanganika Sushi Bar" />
     <meta property="og:description" content="Donde el sushi encuentra el atardecer. Frente al mar en Punta Ballena, Punta del Este." />
-    <meta property="og:image" content="https://storage.googleapis.com/www.tanganika.uy/public/tanganika_white.png" />
+    <meta property="og:image" content="https://www.tanganika.uy/og-image.png" />
+    <meta property="og:image:width" content="1880" />
+    <meta property="og:image:height" content="892" />
+    <meta property="og:image:alt" content="Tanganika Sushi Bar - Frente al mar en Punta Ballena" />
     <meta property="og:locale" content="es_UY" />
     <meta property="og:site_name" content="Tanganika Sushi Bar" />
 
@@ -26,7 +29,7 @@
     <meta name="twitter:url" content="https://www.tanganika.uy/" />
     <meta name="twitter:title" content="Tanganika Sushi Bar" />
     <meta name="twitter:description" content="Donde el sushi encuentra el atardecer. Frente al mar en Punta Ballena, Punta del Este." />
-    <meta name="twitter:image" content="https://storage.googleapis.com/www.tanganika.uy/public/tanganika_white.png" />
+    <meta name="twitter:image" content="https://www.tanganika.uy/og-image.png" />
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="https://storage.googleapis.com/www.tanganika.uy/public/tanganika_white_icon.png" />
@@ -41,6 +44,40 @@
 
     <!-- Preconnect para performance -->
     <link rel="preconnect" href="https://storage.googleapis.com" />
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Restaurant",
+      "name": "Tanganika Sushi Bar",
+      "image": "https://storage.googleapis.com/www.tanganika.uy/public/tanganika_white.png",
+      "url": "https://www.tanganika.uy/",
+      "telephone": "+59894488580",
+      "email": "reservas@tanganika.uy",
+      "servesCuisine": ["Sushi", "Japonesa", "Mariscos"],
+      "priceRange": "$$$",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Mar Mediterraneo, Punta Ballena",
+        "addressLocality": "Maldonado",
+        "postalCode": "20000",
+        "addressCountry": "UY"
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+        ],
+        "opens": "12:00",
+        "closes": "00:00"
+      },
+      "sameAs": [
+        "https://www.instagram.com/tanganikauy/"
+      ],
+      "menu": "https://www.tanganika.uy/menu"
+    }
+    </script>
 
   </head>
 

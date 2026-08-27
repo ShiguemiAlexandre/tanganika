@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef, useMemo, memo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Fish, Martini, Coffee, ChevronRight } from 'lucide-react';
 import { Navbar, Footer } from './LandingPage';
+import { useSEO } from '../hooks/useSEO';
 
 interface MenuItem {
   name: string;
@@ -123,6 +124,12 @@ const MenuCard = memo(({ item }: { item: MenuItem }) => {
 export const MenuPage = () => {
   const location = useLocation();
   const [activeTab, setActiveTab] = useState<'sushi' | 'drinks' | 'brunch'>('sushi');
+
+  useSEO({
+    title: 'Menú | Tanganika Sushi Bar',
+    description: 'Descubrí nuestra carta: sushi de autor, drinks de bar y brunch frente al mar en Punta Ballena, Punta del Este.',
+    path: '/menu',
+  });
 
   const sushiMenu: { category: string; items: MenuItem[] }[] = [
     {

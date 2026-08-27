@@ -45,3 +45,7 @@ jobs:
           destination: www.tanganika.uy
           parent: false
           predefined_acl: publicRead
+
+      - name: Configure SPA routing fallback
+        run: |
+          gsutil web set -m index.html -e index.html gs://www.tanganika.uy

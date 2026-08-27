@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 
+import { useSEO } from '../hooks/useSEO';
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -24,6 +25,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 export const ReservationPage = () => {
+  useSEO({
+    title: 'Reservas | Tanganika Sushi Bar',
+    description: 'Reservá tu mesa en Tanganika Sushi Bar, frente al mar en Punta Ballena, Punta del Este.',
+    path: '/reservation',
+  });
+
   const [formData, setFormData] = useState({
     date: undefined as Date | undefined,
     time: '',
