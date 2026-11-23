@@ -596,7 +596,7 @@ export const Location = () => {
                     <a href="https://www.instagram.com/tanganikauy/" target="_blank" rel="noopener noreferrer" className="hover:text-golden-sunset transition-colors inline-flex items-center gap-2 mt-1">
                       <Instagram size={16} /> @tanganikauy
                     </a>,
-                    <a href="https://wa.me/59894488580" target="_blank" rel="noopener noreferrer" className="hover:text-golden-sunset transition-colors inline-flex items-center gap-2 mt-1">
+                    <a href="https://wa.me/59895143219" target="_blank" rel="noopener noreferrer" className="hover:text-golden-sunset transition-colors inline-flex items-center gap-2 mt-1">
                       <MessageCircle size={16} /> WhatsApp
                     </a>
                   ]
@@ -719,9 +719,9 @@ export const Footer = () => {
                   Mar Mediterraneo, 20000<br />Maldonado, Uruguay
                 </span>
               </div>
-              <a href="tel:+59894488580" className="flex items-center gap-3 text-white-pueblo/60 hover:text-white-pueblo transition-colors group">
+              <a href="tel:+59895143219" className="flex items-center gap-3 text-white-pueblo/60 hover:text-white-pueblo transition-colors group">
                 <Phone size={18} className="group-hover:text-golden-sunset transition-colors" />
-                <span className="text-sm font-light">+598 94 488 580</span>
+                <span className="text-sm font-light">+598 95 143 219</span>
               </a>
               <a href="mailto:reservas@tanganika.uy" className="flex items-center gap-3 text-white-pueblo/60 hover:text-white-pueblo transition-colors group">
                 <Mail size={18} className="group-hover:text-golden-sunset transition-colors" />
@@ -749,7 +749,7 @@ export const Footer = () => {
                   <span>Instagram</span>
                 </a>
                 <a 
-                  href="https://wa.me/59894488580" 
+                  href="https://wa.me/59895143219"
                   target="_blank" 
                   rel="noopener noreferrer" 
                   className="inline-flex items-center gap-2 px-6 py-3 border border-white-pueblo/10 rounded-full text-xs uppercase tracking-widest hover:bg-white-pueblo hover:text-atlantic-blue transition-all duration-300 group w-full justify-center md:w-auto md:justify-start"

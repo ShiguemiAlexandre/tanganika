@@ -55,9 +55,22 @@ export const ReservationPage = () => {
     setMaxDate(twoMonthsLater);
   }, []);
 
+  const formatPhone = (value: string) => {
+    let digits = value.replace(/\D/g, '');
+    if (digits.startsWith('598')) digits = digits.slice(3);
+    digits = digits.slice(0, 8);
+
+    let formatted = '+598';
+    if (digits.length > 0) formatted += ' ' + digits.slice(0, 2);
+    if (digits.length > 2) formatted += ' ' + digits.slice(2, 5);
+    if (digits.length > 5) formatted += ' ' + digits.slice(5, 8);
+    return formatted;
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    const finalValue = name === 'phone' ? formatPhone(value) : value;
+    setFormData(prev => ({ ...prev, [name]: finalValue }));
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => {
@@ -106,8 +119,8 @@ export const ReservationPage = () => {
     
     const message = `Hola, quisiera hacer una reserva en Tanganika.\n\n\u{1F4C5} Fecha: ${formattedDate}\n\u{23F0} Hora: ${time}\n\u{1F465} Personas: ${guests}${tableInfo}${specialAttention}\n\u{1F464} Nombre: ${name}\n\u{1F4DE} Teléfono: ${phone}`;
     
-    // Tanganika phone number: +598 94 488 580
-    const whatsappUrl = `https://api.whatsapp.com/send?phone=59894488580&text=${encodeURIComponent(message)}`;
+    // Tanganika phone number: +598 95 143 219
+    const whatsappUrl = `https://api.whatsapp.com/send?phone=59895143219&text=${encodeURIComponent(message)}`;
     
     window.open(whatsappUrl, '_blank');
     setIsSubmitting(false);
@@ -337,7 +350,7 @@ export const ReservationPage = () => {
                     <Input
                       type="tel"
                       name="phone"
-                      placeholder="+598 ..."
+                      placeholder="+598 99 999 999"
                       value={formData.phone}
                       onChange={handleChange}
                       className={cn(
